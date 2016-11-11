@@ -8,29 +8,29 @@ class Vector;
 class Rectangle;
 class Rectangles;
 
-
 /* Position - punkt (pozycja) na płaszczyźnie. */
 class Position {
   /* Współrzędne na płaszczyźnie. */
-  int posX, posY;
+  int coorX, coorY;
 
 public:
   /* Position można stworzyć, przekazując współrzędne, np. Position(100, 200). Nie
   powinno być możliwe skonstruowanie obiektu Position bez podawania argumentów
   (t.j.  Position()). */
-  Position(int xx, int yy);
+  Position(const int xx, const int yy);
 
   /* Position ma metody x() i y(), które wyciągają odpowiednie współrzędne. */
-  int x();
-  int y();
+  int x() const;
+  int y() const;
 
   /* Position ma metodę reflection(), która zwraca pozycję odbitą względem osi x = y. */
-  Position reflection();
+  Position reflection() const;
 
   /* Position można porównywać za pomocą operatora ==. */
   inline bool operator==(const Position& rhs);
 
-  /* Position implementuje operator "+=(vec)", gdzie vec jest wektorem. Operator */
+  /* Position implementuje operator "+=(vec)", gdzie vec jest wektorem. Operator
+  powinien zwrócić referencję do wołanego obiektu */
   Position& operator+=(const Vector& vec);
 
   /* Position implementuje statyczną metodę origin(), która zwraca
@@ -42,20 +42,20 @@ public:
 /* Vector - wektor na płaszczyźnie. */
 class Vector {
   /* Współrzędne wektora. */
-  int vecX, vecY;
+  int coorX, coorY;
 
 public:
   /* Vector można stworzyć, przekazując współrzędne, np. Vector(100, 200). Nie
   powinno być możliwe skonstruowanie obiektu Vector bez podawania argumentów
   (t.j.  Vector()). */
-  Vector(int xx, int yy);
+  Vector(const int xx, const int yy);
 
   /* Vector ma metody x() i y(), które wyciągają odpowiednie współrzędne. */
-  int x();
-  int y();
+  int x() const;
+  int y() const;
 
   /* Vector ma metodę reflection(), która zwraca wektor odbity względem osi x = y. */
-  Vector reflection();
+  Vector reflection() const;
 
   /* Vector można porównywać za pomocą operatora ==. */
   inline bool operator==(const Vector& rhs);
@@ -79,17 +79,18 @@ public:
   rogu: Rectangle(width, height, pos) lub Rectangle(width, height) - wtedy
   pozycja jest ustalona na (0, 0). Nie powinno być możliwe skonstruowanie
   obiektu Rectangle bez podawania argumentów (t.j.Rectangle()). */
-  Rectangle(int width, int height, int pos);
+  Rectangle(int width, int height, const Position& pos);
   Rectangle(int width, int height);
+  Rectangle(const Vector& diagonal, const Position& pos);
 
   /* Rectangle ma metody width(),  height() i pos(), które wyciągają odpowiednie
   współrzędne i pozycję lewego dolnego rogu. */
-  int width();
-  int height();
-  Position pos();
+  int width() const;
+  int height() const;
+  Position pos() const;
 
   /* Rectangle ma metodę reflection(), która zwraca prostokąt odbity względem osi x = y. */
-  Rectangle reflection();
+  Rectangle reflection() const;
 
   /* Rectangle można porównywać za pomocą operatora ==. */
   inline bool operator==(const Rectangle& rhs);
@@ -99,7 +100,7 @@ public:
   Rectangle& operator+=(const Vector& vec);
 
   /* Rectangle implementuje metodę area(), która wylicza jego pole powierzchni. */
-  int area();
+  int area() const;
 
   /* Rectangle implementuje metodę split_horizontally(place), która zwraca
   parę prostokątów powstałą z rozcięcia prostokąta wzdłuż osi X, tak że
