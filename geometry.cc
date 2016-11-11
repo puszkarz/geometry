@@ -1,4 +1,5 @@
 #include <cassert>
+#include <cmath>
 #include "geometry.h"
 
 #ifndef NDEBUG
@@ -92,16 +93,28 @@ Vector& Vector::operator+=(const Vector& vec) {
 /* RECTANGLE */
 
 Rectangle::Rectangle(int width, int height, const Position& pos)
-  : diag(width,height)
-  , bottomLeft(pos) {};
+  : diag(width, height)
+  , bottomLeft(pos) {
+    assert(width > 0 && height > 0);
+  };
+
+Rectangle::Rectangle(int width, int height, Position&& pos)
+  : diag(width, height)
+  , bottomLeft(std::move(pos)) {
+    assert(width > 0 && height > 0);
+  };
 
 Rectangle::Rectangle(int width, int height)
   : diag(width, height)
-  , bottomLeft(Position::origin()) {};
+  , bottomLeft(Position::origin()) {
+    assert(width > 0 && height > 0);
+  };
 
 Rectangle::Rectangle(const Position& pos, const Vector& diagonal)
   : diag(diagonal)
-  , bottomLeft(pos) {};
+  , bottomLeft(pos) {
+    assert(diagonal.x() > 0 && diagonal.y() > 0);
+  };
 
 Rectangle::Rectangle(const Rectangle& that) // copy constructor
   : diag(that.diag)
@@ -138,7 +151,11 @@ Rectangle& Rectangle::operator+=(const Vector& vec) {
 };
 
 Rectangle Rectangle::reflection() const {
-  return Rectangle(this->bottomLeft.reflection(), this->diag.reflection());
+  const Vector &diagReflected = this->diag.reflection();
+  const Position &posReflected = this->bottomLeft.reflection();
+  return Rectangle(abs(diagReflected.x()), abs(diagReflected.y()),
+    Position(posReflected.x() + (diagReflected.x() < 0) * diagReflected.x(),
+             posReflected.y() + (diagReflected.y() < 0) * diagReflected.y()));
 };
 
 int Rectangle::area() const {
@@ -155,8 +172,8 @@ rectanglePair Rectangle::split_horizontally(int place) {
 };
 
 rectanglePair Rectangle::split_vertically(int place) {
-  assert(place <= this->width()); //TODO czy ostro czy nie (czy dopuszczamy prostokąty o zerowe)
-  assert(place >= 0);
+  assert(place < this->width());
+  assert(place > 0);
   return rectanglePair(Rectangle(place, this->height(), this->bottomLeft),
                        Rectangle(this->width()-place, this->height()-place, this->bottomLeft));
 };

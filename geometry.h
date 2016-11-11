@@ -10,6 +10,7 @@ class Rectangles;
 
 /* Position - punkt (pozycja) na płaszczyźnie. */
 class Position {
+
   /* Współrzędne na płaszczyźnie. */
   int coorX, coorY;
 
@@ -46,6 +47,7 @@ public:
 
 /* Vector - wektor na płaszczyźnie. */
 class Vector {
+
   /* Współrzędne wektora. */
   int coorX, coorY;
 
@@ -85,6 +87,7 @@ public:
   obiektu Rectangle bez podawania argumentów (t.j.Rectangle()). */
   Rectangle() = delete;
   Rectangle(int width, int height, const Position& pos);
+  Rectangle(int width, int height, Position&& pos);
   Rectangle(int width, int height);
   Rectangle(const Position& pos, const Vector& diagonal);
   Rectangle(const Rectangle& that);
